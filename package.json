@@ -1,0 +1,12 @@
+{
+  "name": "body-arena",
+  "version": "1.2.1",
+  "private": true,
+  "scripts": {
+    "build": "node --check dist/app.js",
+    "test": "node tests/geometry.cjs && node tests/editor.cjs && node tests/scale.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

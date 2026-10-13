@@ -1,0 +1,10 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync('dist/app.js','utf8');
+const fn=source.slice(source.indexOf('function applyPlayerScale'),source.indexOf("$('playerScale').oninput"));
+const elements={},saved={},state={p:{visualScale:1}};
+const c={Number,Math,state,$:id=>elements[id]??=( {style:{}} ),localStorage:{setItem:(k,v)=>saved[k]=v}};
+vm.createContext(c);vm.runInContext(fn,c);
+c.applyPlayerScale(250);assert.equal(state.p.visualScale,2.5);assert.equal(elements.arenaScale.value,250);assert.equal(elements.playerScale.value,250);assert.equal(elements.hero.style.width,'425px');assert.equal(saved.bodyArenaScale,'250');
+c.applyPlayerScale(500);assert.equal(state.p.visualScale,3);
+c.applyPlayerScale('invalid');assert.equal(state.p.visualScale,1);
+console.log('PASS: live arena sizing, lobby sync, remembered setting, bounds and invalid input');
